@@ -2,7 +2,7 @@ These are the steps to set up a containerized (docker) version of our single cel
 
 1. build the shinyapp docker image: `docker build -f Dockerfile.shinyapp --build-arg GITHUB_PAT=<your github personal access token> -t whtns/chevreul:latest .`
 
-2. create a docker network called chevreul-net: `sudo docker network create chevreul-network`
+2. create a docker network called chevreul-network: `sudo docker network create chevreul-network`
 
 3. edit the application.yml file to refer to the appropriate docker images and containers 
   - id: seuratApp
@@ -10,7 +10,7 @@ These are the steps to set up a containerized (docker) version of our single cel
     container-image: whtns/chevreul
     access-groups: scientists
     container-volumes: ["/dataVolume/storage/single_cell_projects/shinyproxy/dockerdata:/root/dockerdata"]
-    container-network: chevreul-net
+    container-network: chevreul-network
 
 4. build the shinyproxy docker image `docker build -f Dockerfile.shinyproxy -t whtns/chevreul_container:latest .`
 
