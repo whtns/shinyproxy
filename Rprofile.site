@@ -1,0 +1,5 @@
+local({
+   options(repos="https://cloud.r-project.org/", shiny.port = 3838, shiny.host = "0.0.0.0")
+})
+
+
