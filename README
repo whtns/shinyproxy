@@ -1,17 +1,19 @@
-These are the steps to set up a containerized (docker) version of our single cell analysis apps. Shiny apps run using the shinyproxy service which itself will be containerized so that the whole operation can be run on a host system with minimal institutional support. 
+These are the steps to set up a containerized docker version of our single cell analysis apps. Shiny apps run using the shinyproxy service which itself will be containerized so that the whole operation can be run on a host system with minimal institutional support. 
 
-1. build the shinyapp docker image: `docker build -f Dockerfile.shinyapp --build-arg GITHUB_PAT=<your github personal access token> -t whtns/chevreul:latest .`
+1. build the shinyapp docker image: `docker build -f Dockerfile.shinyapp --build-arg GITHUB_PAT=$PAT -t whtns/seurattools:latest .`
 
-2. create a docker network called chevreul-network: `sudo docker network create chevreul-network`
+	* if troubleshooting package install run: `docker build -f Dockerfile.shinyapp --build-arg GITHUB_PAT=$PAT -t whtns/seurattools:latest . --build-arg CACHEBUST=$(date +%s)`
+
+2. create a docker network called seuratTools-network: `sudo docker network create seurattools-net`
 
 3. edit the application.yml file to refer to the appropriate docker images and containers 
   - id: seuratApp
     container-cmd: ["R", "-e", "shiny::runApp('/root/dockerapp')"]
-    container-image: whtns/chevreul
+    container-image: whtns/seurattools
     access-groups: scientists
     container-volumes: ["/dataVolume/storage/single_cell_projects/shinyproxy/dockerdata:/root/dockerdata"]
-    container-network: chevreul-network
+    container-network: seurattools-net
 
-4. build the shinyproxy docker image `docker build -f Dockerfile.shinyproxy -t whtns/chevreul_container:latest .`
+4. build the shinyproxy docker image `docker build -f Dockerfile.shinyproxy -t whtns/seurattools_container:latest .`
 
-5. run the shinyproxy docker image with `sudo docker run -v /dataVolume/storage/single_cell_projects/shinyproxy/dockerdata:/root/dockerdata -v /var/run/docker.sock:/var/run/docker.sock:ro --group-add $(getent group docker | cut -d: -f3) --net chevreul-net -p 8080:8080 whtns/chevreul_container
+5. run the shinyproxy docker image with `sudo docker run -v /dataVolume/storage/single_cell_projects/shinyproxy/dockerdata:/root/dockerdata -v /var/run/docker.sock:/var/run/docker.sock:ro --group-add $(getent group docker | cut -d: -f3) --net seurattools-net -p 8080:8080 whtns/seurattools_container`

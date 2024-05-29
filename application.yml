@@ -28,13 +28,17 @@ proxy:
   #   container-network: sp-example-net
   - id: euler
     container-cmd: ["R", "-e", "shiny::runApp('/root/euler')"]
-    container-image: whtns/chevreul
+    container-image: whtns/seurattools
     access-groups: admins
     container-volumes: ["/dataVolume/storage/single_cell_projects/shinyproxy/dockerdata:/root/dockerdata"]
-    container-network: chevreul-network
+    container-network: seurattools-net
   - id: seuratApp
     container-cmd: ["R", "-e", "shiny::runApp('/root/dockerapp')"]
-    container-image: whtns/chevreul
-    access-groups: admins
+    container-image: whtns/seurattools
+    access-groups: scientists
     container-volumes: ["/dataVolume/storage/single_cell_projects/shinyproxy/dockerdata:/root/dockerdata"]
-    container-network: chevreul-network
+    container-network: seurattools-net
+
+logging:
+  file:
+    name: shinyproxy.log

@@ -75,18 +75,18 @@ RUN R -e 'BiocManager::install("InteractiveComplexHeatmap")'
 RUN R -e 'BiocManager::install("plyranges")'
 
 COPY Rprofile.site /usr/local/lib/R/etc/
-RUN R -e 'remotes::install_github("whtns/chevreul")'
 
 RUN R -e 'install.packages("RSQLite")'
 RUN R -e 'BiocManager::install("EnsDb.Hsapiens.v86")'
 
-# COPY application.yml /opt/shinyproxy/application.yml
+# Custom cache invalidation
+ARG CACHEBUST=1
 
-RUN rm -rf /root/dockerapp
+RUN R -e 'remotes::install_github("whtns/seuratTools")'
+
 RUN mkdir /root/dockerapp
 COPY dockerapp /root/dockerapp
 # copy the app to the image
-RUN rm -rf /root/euler
 RUN mkdir /root/euler
 COPY euler /root/euler
 CMD ["R", "-e", "shiny::runApp('/root/dockerapp')"]
