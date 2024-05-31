@@ -1,8 +1,9 @@
 proxy:
   title: Open Analytics Shiny Proxy
   logo-url: https://www.openanalytics.eu/shinyproxy/logo.png
-  landing-page: /app/seuratApp
+  landing-page: /
   port: 8080
+  container-wait-time: 90000
   authentication: none
   hide-navbar: true
   container-log-path: /etc/shinyproxy/container-logs
@@ -30,13 +31,15 @@ proxy:
     container-cmd: ["R", "-e", "shiny::runApp('/root/euler')"]
     container-image: whtns/seurattools
     access-groups: admins
-    container-volumes: ["/dataVolume/storage/single_cell_projects/shinyproxy/dockerdata:/root/dockerdata"]
+    # container-volumes: ["/dataVolume/storage/single_cell_projects/shinyproxy/dockerdata:/root/dockerdata"]
+    container-volumes: ["/home/kstachelek/cobrinik_seuratApp_dockerdata:/root/dockerdata"]
     container-network: seurattools-net
   - id: seuratApp
     container-cmd: ["R", "-e", "shiny::runApp('/root/dockerapp')"]
     container-image: whtns/seurattools
-    access-groups: scientists
-    container-volumes: ["/dataVolume/storage/single_cell_projects/shinyproxy/dockerdata:/root/dockerdata"]
+    access-groups: admins
+    # container-volumes: ["/dataVolume/storage/single_cell_projects/shinyproxy/dockerdata:/root/dockerdata"]
+    container-volumes: ["/home/kstachelek/cobrinik_seuratApp_dockerdata:/root/dockerdata"]
     container-network: seurattools-net
 
 logging:

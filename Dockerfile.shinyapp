@@ -54,7 +54,6 @@ RUN R -e 'BiocManager::install("wiggleplotr")'
 RUN R -e 'BiocManager::install("ensembldb")'
 ARG GITHUB_PAT
 ENV GITHUB_PAT=$GITHUB_PAT
-RUN R -e 'install.packages("Seurat")'
 RUN R -e 'install.packages("clustree", dependencies=TRUE)'
 RUN R -e 'install.packages("ggpubr", dependencies=TRUE)'
 RUN R -e 'remotes::install_github("velocyto-team/velocyto.R")'
@@ -82,8 +81,15 @@ RUN R -e 'BiocManager::install("EnsDb.Hsapiens.v86")'
 # Custom cache invalidation
 ARG CACHEBUST=1
 
+RUN R -e 'remotes::install_version("Matrix", version = "1.6.4")'
+RUN R -e 'install.packages("SeuratObject")'
+RUN R -e 'BiocManager::install("LoomExperiment")'
+RUN R -e 'BiocManager::install("velociraptor")'
+
+# Custom cache invalidation
+ARG CACHEBUST=1
 RUN R -e 'remotes::install_github("whtns/seuratTools")'
-RUN R -e 'install.packages("formattable")'
+# RUN R -e 'install.packages("formattable")'
 RUN mkdir /root/dockerapp
 COPY dockerapp /root/dockerapp
 # copy the app to the image
