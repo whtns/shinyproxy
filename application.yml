@@ -1,7 +1,7 @@
 proxy:
   title: Open Analytics Shiny Proxy
   logo-url: https://www.openanalytics.eu/shinyproxy/logo.png
-  landing-page: /
+  landing-page: /app/seuratApp
   port: 8080
   container-wait-time: 90000
   authentication: none
